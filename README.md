@@ -51,7 +51,7 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer Anda:
    ```bash
    git clone https://github.com/AdnNyx/SchoolWebsite.git
    ```
-```bash
+   ```bash
    cd repo-mi-alhidayah
    ```
  2. **Install Dependensi**
