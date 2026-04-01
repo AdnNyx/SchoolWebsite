@@ -49,9 +49,10 @@ src/
 Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer Anda:
  1. **Clone Repositori**
    ```bash
-   git clone [https://github.com/username-anda/repo-mi-alhidayah.git](https://github.com/username-anda/repo-mi-alhidayah.git)
+   git clone https://github.com/AdnNyx/SchoolWebsite.git
+   ```
+```bash
    cd repo-mi-alhidayah
-   
    ```
  2. **Install Dependensi**
    Pastikan Anda sudah menginstal Node.js. Kemudian jalankan:
@@ -76,4 +77,5 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer Anda:
  * [ ] Integrasi Halaman Login Admin
  * [ ] Pembuatan Dashboard Admin
  * [ ] Integrasi API Backend (PostgreSQL + FastAPI)
+
 **Dikembangkan dengan ❤️ untuk pendidikan yang lebih baik.**
