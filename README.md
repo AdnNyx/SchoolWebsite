@@ -52,7 +52,10 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer Anda:
    git clone https://github.com/AdnNyx/SchoolWebsite.git
    ```
    ```bash
-   cd repo-mi-alhidayah
+   cd SchoolWebsite
+   ```
+   ```bash
+   cd frontend
    ```
  2. **Install Dependensi**
    Pastikan Anda sudah menginstal Node.js. Kemudian jalankan:
