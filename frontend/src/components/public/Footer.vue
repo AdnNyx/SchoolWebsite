@@ -7,7 +7,7 @@
         <div class="space-y-4">
           <router-link to="/" class="flex items-center gap-3 group inline-flex">
             <img
-              src="https://ui-avatars.com/api/?name=MI&background=2563eb&color=fff&rounded=true&bold=true"
+              :src="logo"
               alt="Logo"
               class="w-9 h-9 transform group-hover:scale-110 transition-transform shadow-sm"
             />
@@ -225,5 +225,6 @@
 </template>
 
 <script setup lang="ts">
+import logo from "../../assets/logo.png";
 // Tidak memerlukan logika state karena Footer bersifat statis
 </script>
