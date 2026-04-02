@@ -5,6 +5,7 @@ export class HeroScene {
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private particles!: THREE.Points;
+  private material!: THREE.ShaderMaterial; // Kita simpan material di variabel kelas
   private animationId: number = 0;
 
   private mouseX: number = 0;
@@ -22,7 +23,7 @@ export class HeroScene {
       0.1,
       1000,
     );
-    this.camera.position.z = 5;
+    this.camera.position.z = 5.5;
 
     this.renderer = new THREE.WebGLRenderer({
       canvas,
@@ -41,61 +42,55 @@ export class HeroScene {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // 1. Tambahkan jumlah partikel agar lebih padat seperti bintang
-    const particlesCount = 2000;
-    const geometry = new THREE.BufferGeometry();
-    const posArray = new Float32Array(particlesCount * 3);
-    const colorArray = new Float32Array(particlesCount * 3);
+    const geometry = new THREE.SphereGeometry(2.8, 220, 220);
 
-    for (let i = 0; i < particlesCount * 3; i++) {
-      // Sebaran posisi yang lebih luas untuk menciptakan kedalaman (depth)
-      posArray[i] = (Math.random() - 0.5) * 15;
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load(
+      "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_specular_2048.jpg",
+    );
 
-      // Variasi warna: Campuran antara putih dan biru muda
-      const mixedColor = new THREE.Color();
-      mixedColor.setHSL(0.6, 0.8, Math.random() * 0.5 + 0.5); // Range biru ke putih
-      colorArray[i] = mixedColor.r;
-      colorArray[i + 1] = mixedColor.g;
-      colorArray[i + 2] = mixedColor.b;
-    }
+    // Tetapkan material ke variabel kelas agar bisa diubah warnanya nanti
+    this.material = new THREE.ShaderMaterial({
+      uniforms: {
+        earthTexture: { value: earthTexture },
+        // Warna awal, nanti akan di-override di dalam fungsi animate()
+        color: { value: new THREE.Color(0x3b82f6) },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = 1.2 * (5.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D earthTexture;
+        uniform vec3 color;
+        varying vec2 vUv;
+        void main() {
+          vec4 map = texture2D(earthTexture, vUv);
 
-    geometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colorArray, 3));
+          if (map.r > 0.5) discard;
 
-    // 2. Gunakan Canvas Texture untuk membuat partikel berbentuk bulat bercahaya
-    const material = new THREE.PointsMaterial({
-      size: 0.04,
-      vertexColors: true, // Mengaktifkan variasi warna yang kita buat di atas
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          if (length(coord) > 0.5) discard;
+
+          // Opacity 0.9 agar tetap tajam
+          gl_FragColor = vec4(color, 0.9);
+        }
+      `,
       transparent: true,
-      opacity: 0.8,
       blending: THREE.AdditiveBlending,
-      sizeAttenuation: true, // Membuat partikel mengecil saat jauh dari kamera
+      depthWrite: false,
     });
 
-    // Trick: Membuat tekstur bulat via program (tanpa file eksternal)
-    material.map = this.createCircleTexture();
-
-    this.particles = new THREE.Points(geometry, material);
+    this.particles = new THREE.Points(geometry, this.material);
+    this.particles.rotation.z = 0.41;
     this.scene.add(this.particles);
   }
 
-  // Fungsi pembantu untuk membuat tekstur bintang bulat yang smooth
-  private createCircleTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 64;
-    canvas.height = 64;
-    const context = canvas.getContext("2d")!;
-    const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-    // Menggunakan warna biru cerah (Tailwind blue-500) agar kontras di latar putih & hitam
-    gradient.addColorStop(0, "rgba(59, 130, 246, 1)");
-    gradient.addColorStop(0.2, "rgba(59, 130, 246, 0.8)");
-    gradient.addColorStop(0.5, "rgba(59, 130, 246, 0.2)");
-    gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, 64, 64);
-
-    return new THREE.CanvasTexture(canvas);
-  }
   private onDocumentMouseMove(event: MouseEvent) {
     this.mouseX = event.clientX - this.windowHalfX;
     this.mouseY = event.clientY - this.windowHalfY;
@@ -104,19 +99,23 @@ export class HeroScene {
   private animate() {
     this.animationId = requestAnimationFrame(this.animate.bind(this));
 
-    // Logika interaksi mouse (smooth lerp)
-    this.targetX = this.mouseX * 0.0008;
-    this.targetY = this.mouseY * 0.0008;
+    // --- LOGIKA DETEKSI TEMA (LIGHT/DARK MODE) ---
+    const isDark = document.documentElement.classList.contains("dark");
+    // Jika Dark Mode: Biru Cerah (0x3b82f6). Jika Light Mode: Biru Gelap/Dongker (0x1e3a8a)
+    const targetColorHex = isDark ? 0x3b82f6 : 0x1e3a8a;
+    const targetColor = new THREE.Color(targetColorHex);
 
-    this.particles.rotation.y +=
-      0.05 * (this.targetX - this.particles.rotation.y);
-    this.particles.rotation.x +=
-      0.05 * (this.targetY - this.particles.rotation.x);
+    // Lerp: Animasi transisi warna yang sangat halus (smooth transition)
+    this.material.uniforms.color.value.lerp(targetColor, 0.05);
+    // ---------------------------------------------
 
-    // 3. Putaran otomatis konstan (Autopilot)
-    // Membuat bintang seolah-olah berotasi perlahan di galaksi
+    this.targetX = this.mouseX * 0.001;
+    this.targetY = this.mouseY * 0.001;
+
+    this.scene.rotation.y += 0.05 * (this.targetX - this.scene.rotation.y);
+    this.scene.rotation.x += 0.05 * (this.targetY - this.scene.rotation.x);
+
     this.particles.rotation.y += 0.0015;
-    this.particles.rotation.z += 0.0005;
 
     this.renderer.render(this.scene, this.camera);
   }
