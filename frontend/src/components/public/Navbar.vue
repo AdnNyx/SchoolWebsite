@@ -28,37 +28,32 @@
           to="/"
           class="px-4 py-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           exact-active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+          >Beranda</router-link
         >
-          Beranda
-        </router-link>
         <router-link
           to="/profil"
           class="px-4 py-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+          >Profil</router-link
         >
-          Profil
-        </router-link>
         <router-link
           to="/fasilitas"
           class="px-4 py-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+          >Fasilitas</router-link
         >
-          Fasilitas
-        </router-link>
         <router-link
           to="/berita"
           class="px-4 py-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+          >Berita</router-link
         >
-          Berita
-        </router-link>
         <router-link
           to="/tentang-kami"
           class="px-4 py-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+          >Tentang Kami</router-link
         >
-          Tentang Kami
-        </router-link>
       </nav>
 
       <div class="flex items-center gap-2 md:gap-4">
@@ -97,13 +92,6 @@
             />
           </svg>
         </button>
-
-        <router-link
-          to="/admin/login"
-          class="hidden md:inline-flex px-5 py-2 text-sm bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
-        >
-          Portal Admin
-        </router-link>
 
         <button
           @click.stop="isMobileMenuOpen = !isMobileMenuOpen"
@@ -156,51 +144,36 @@
             to="/"
             class="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             exact-active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+            >Beranda</router-link
           >
-            Beranda
-          </router-link>
           <router-link
             @click="isMobileMenuOpen = false"
             to="/profil"
             class="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+            >Profil</router-link
           >
-            Profil
-          </router-link>
           <router-link
             @click="isMobileMenuOpen = false"
             to="/fasilitas"
             class="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+            >Fasilitas</router-link
           >
-            Fasilitas
-          </router-link>
           <router-link
             @click="isMobileMenuOpen = false"
             to="/berita"
             class="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+            >Berita</router-link
           >
-            Berita
-          </router-link>
           <router-link
             @click="isMobileMenuOpen = false"
             to="/tentang-kami"
             class="block px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             active-class="bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold"
+            >Tentang Kami</router-link
           >
-            Tentang Kami
-          </router-link>
-
-          <hr class="border-slate-200 dark:border-slate-700 my-2" />
-
-          <router-link
-            @click="isMobileMenuOpen = false"
-            to="/admin/login"
-            class="block w-full text-center px-5 py-3 text-sm bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-md"
-          >
-            Portal Admin
-          </router-link>
         </nav>
       </div>
     </transition>
@@ -208,14 +181,11 @@
 </template>
 
 <script setup lang="ts">
-// TAMBAHKAN onUnmounted di import
 import { ref, onMounted, onUnmounted } from "vue";
 import logo from "../../assets/logo.png";
 
 const isDark = ref(false);
 const isMobileMenuOpen = ref(false);
-
-// 1. Buat referensi (ref) ke elemen header
 const navbarRef = ref<HTMLElement | null>(null);
 
 const toggleTheme = () => {
@@ -229,9 +199,7 @@ const toggleTheme = () => {
   }
 };
 
-// 2. Fungsi untuk mendeteksi klik di luar navbar
 const handleClickOutside = (event: MouseEvent) => {
-  // Jika menu sedang terbuka, dan elemen navbar ADA, dan yang diklik BUKAN bagian dari navbar
   if (
     isMobileMenuOpen.value &&
     navbarRef.value &&
@@ -252,12 +220,9 @@ onMounted(() => {
   } else {
     document.documentElement.classList.remove("dark");
   }
-
-  // 3. Pasang pendengar acara (event listener) saat komponen dimuat
   document.addEventListener("click", handleClickOutside);
 });
 
-// 4. BONGKAR pendengar acara saat komponen dihancurkan (penting agar tidak bocor memori!)
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
@@ -269,7 +234,6 @@ onUnmounted(() => {
   transition: all 0.3s ease-in-out;
   transform-origin: top;
 }
-
 .mobile-menu-enter-from,
 .mobile-menu-leave-to {
   opacity: 0;
