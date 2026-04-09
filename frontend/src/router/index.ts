@@ -103,7 +103,7 @@ const router = createRouter({
 });
 
 // Router Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
   const isGoingToAdmin = to.path.startsWith("/admin");
   const isGoingToLogin = to.name === "AdminLogin";
