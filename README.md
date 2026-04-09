@@ -74,8 +74,8 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer Anda:
  * [x] Desain Halaman Berita & Filter Kategori
  * [x] Desain Halaman Tentang Kami & Kontak
  * [x] Setup Transisi & Animasi Global
- * [ ] Integrasi Halaman Login Admin
- * [ ] Pembuatan Dashboard Admin
+ * [x] Integrasi Halaman Login Admin
+ * [x] Pembuatan Dashboard Admin
  * [ ] Integrasi API Backend (PostgreSQL + FastAPI)
 
 **Dikembangkan dengan ❤️ untuk pendidikan yang lebih baik.**
