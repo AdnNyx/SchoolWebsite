@@ -13,7 +13,7 @@
               class="absolute inset-0 bg-blue-600 rounded-3xl transform translate-x-4 translate-y-4 dark:opacity-80 -z-10"
             ></div>
             <img
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              src="/image/kepalasekolah.jpeg"
               alt="Kepala Sekolah"
               class="w-full h-[500px] object-cover rounded-3xl shadow-xl border-4 border-white dark:border-slate-800 transition-colors duration-500"
             />
@@ -21,7 +21,7 @@
               class="absolute bottom-6 left-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/20 dark:border-slate-700 text-center transition-colors duration-500"
             >
               <h4 class="font-bold text-slate-900 dark:text-white text-lg">
-                Bpk. Ahmad Fulan, S.Pd.I
+                Khoeru Khotibul Umam S. Sos. I
               </h4>
               <p class="text-blue-600 dark:text-blue-400 text-sm font-semibold">
                 Kepala Sekolah
